@@ -36,12 +36,14 @@ import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies
 import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.ProjectIvyDependencyDescriptorFactory;
 import org.gradle.api.internal.artifacts.transform.ArtifactTransformActionScheme;
 import org.gradle.api.internal.artifacts.transform.ArtifactTransformParameterScheme;
+import org.gradle.api.internal.artifacts.transform.CacheableTransformTypeAnnotationHandler;
 import org.gradle.api.internal.artifacts.transform.InputArtifactAnnotationHandler;
 import org.gradle.api.internal.artifacts.transform.InputArtifactDependenciesAnnotationHandler;
 import org.gradle.api.internal.tasks.properties.InspectionScheme;
 import org.gradle.api.internal.tasks.properties.InspectionSchemeFactory;
 import org.gradle.api.internal.tasks.properties.annotations.NoOpPropertyAnnotationHandler;
 import org.gradle.api.internal.tasks.properties.annotations.PropertyAnnotationHandler;
+import org.gradle.api.internal.tasks.properties.annotations.TypeAnnotationHandler;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.CompileClasspath;
 import org.gradle.api.tasks.Console;
@@ -111,6 +113,10 @@ class DependencyManagementGlobalScopeServices {
 
     ProducerGuard<ExternalResourceName> createProducerAccess() {
         return ProducerGuard.adaptive();
+    }
+
+    TypeAnnotationHandler createCacheableTransformAnnotationHandler() {
+        return new CacheableTransformTypeAnnotationHandler();
     }
 
     InputArtifactAnnotationHandler createInputArtifactAnnotationHandler() {

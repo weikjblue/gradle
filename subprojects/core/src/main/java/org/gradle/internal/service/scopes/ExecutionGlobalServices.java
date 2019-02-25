@@ -22,6 +22,7 @@ import org.gradle.api.internal.tasks.properties.InspectionScheme;
 import org.gradle.api.internal.tasks.properties.InspectionSchemeFactory;
 import org.gradle.api.internal.tasks.properties.PropertyWalker;
 import org.gradle.api.internal.tasks.properties.TaskScheme;
+import org.gradle.api.internal.tasks.properties.annotations.CacheableTaskTypeAnnotationHandler;
 import org.gradle.api.internal.tasks.properties.annotations.DestroysPropertyAnnotationHandler;
 import org.gradle.api.internal.tasks.properties.annotations.InputDirectoryPropertyAnnotationHandler;
 import org.gradle.api.internal.tasks.properties.annotations.InputFilePropertyAnnotationHandler;
@@ -35,6 +36,7 @@ import org.gradle.api.internal.tasks.properties.annotations.OutputDirectoryPrope
 import org.gradle.api.internal.tasks.properties.annotations.OutputFilePropertyAnnotationHandler;
 import org.gradle.api.internal.tasks.properties.annotations.OutputFilesPropertyAnnotationHandler;
 import org.gradle.api.internal.tasks.properties.annotations.PropertyAnnotationHandler;
+import org.gradle.api.internal.tasks.properties.annotations.TypeAnnotationHandler;
 import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.CompileClasspath;
 import org.gradle.api.tasks.Console;
@@ -59,8 +61,8 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class ExecutionGlobalServices {
-    InspectionSchemeFactory createInspectionSchemeFactory(List<PropertyAnnotationHandler> handlers, CrossBuildInMemoryCacheFactory cacheFactory) {
-        return new InspectionSchemeFactory(handlers, cacheFactory);
+    InspectionSchemeFactory createInspectionSchemeFactory(List<PropertyAnnotationHandler> propertyHandlers, List<TypeAnnotationHandler> typeHandlers, CrossBuildInMemoryCacheFactory cacheFactory) {
+        return new InspectionSchemeFactory(propertyHandlers, typeHandlers, cacheFactory);
     }
 
     TaskScheme createTaskScheme(InspectionSchemeFactory inspectionSchemeFactory, InstantiatorFactory instantiatorFactory) {
@@ -75,6 +77,10 @@ public class ExecutionGlobalServices {
 
     TaskClassInfoStore createTaskClassInfoStore(CrossBuildInMemoryCacheFactory cacheFactory) {
         return new DefaultTaskClassInfoStore(cacheFactory);
+    }
+
+    TypeAnnotationHandler createCacheableTaskAnnotationHandler() {
+        return new CacheableTaskTypeAnnotationHandler();
     }
 
     PropertyAnnotationHandler createInjectAnnotationHandler() {
